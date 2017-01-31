@@ -1,0 +1,12 @@
+*******************	DOCUMENTATION 		*********************
+Bibliographie:
+https://www.npmjs.com/package/xlsx
+
+// Initialisation
+var XLSX = require('xlsx');
+var workbook = XLSX.readFile('test.xlsx');
+
+// Récupèrer tous les sheets
+var all_sheet = workbook.SheetNames;
+var nombre_sheet = all_sheet .length;
+

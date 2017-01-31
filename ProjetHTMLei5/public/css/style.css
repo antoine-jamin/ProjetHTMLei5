@@ -1,0 +1,14 @@
+.table
+{
+    width : 85%;
+}
+
+td,th
+{
+    text-align: center;
+}
+
+.form-group
+{
+	width : 50%;
+}
