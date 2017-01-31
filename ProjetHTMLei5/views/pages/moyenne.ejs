@@ -1,0 +1,33 @@
+<% include ../partials/head %>
+
+<div class="row">
+	<div class="col-md-8 col-md-offset-1">
+		<h1> Liste des eleves </h1>
+	</div>
+</div>
+<% var pam_moyenne=0; var pince_moyenne=0; var num=0; %>
+<div class="row">
+	<div class="col-md-12">
+		<div class="col-md-10 col-md-offset-1">
+			<% if (!valeur.eleves.length) { %>
+				<b> Pas de donnée enregistrés </b>
+				<br><br>
+
+			<%} else { %>
+				<table class="table table-hover col-lg-4 col-lg-offset-1">
+
+				<% valeur.eleves.forEach(function(eleve) { %>
+					
+					<tr>
+						<td width=40> <%= eleve.dA %> </td>
+						<td width=40> <%= eleve.dB %> </td>
+						<td width=40> <%= eleve.dC %> </td>
+					</tr>
+				<% }) %>
+				</table>
+			<% } %>
+		</div>
+	</div>
+</div>
+
+<% include ../partials/foot %>

@@ -1,5 +1,6 @@
 {
   "name": "AppPatient",
+  "main": "app.js",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -15,7 +16,7 @@
     "serve-favicon": "~2.3.0",
     "mongodb": "*",
     "mongoose": "*",
-    "ejs": "~0.7.1",
+    "ejs": "^1.0.0",
     "body-parser": "*"
   }
 }

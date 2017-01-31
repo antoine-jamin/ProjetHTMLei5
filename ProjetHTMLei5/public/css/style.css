@@ -12,3 +12,74 @@ td,th
 {
 	width : 50%;
 }
+
+.navbar .navbar-brand img{
+  height: 50px;
+}
+
+.dropdown-menu {
+	background-color: #0b3b67;
+}
+
+.dropdown-submenu{
+	background-color: #0b3b67;
+}
+
+.breadcrumb{
+	color: #0b3b67;
+	margin-top: -20px;
+	font-size: 12px;
+}
+
+.table-responsive{
+	width: 100%;
+}
+
+.btn{
+	font-size: 10px;
+}
+
+
+.selection{
+        background-color: #8888DD;
+      }
+
+#myNavbar a{
+  color: #cfd0ca;
+  font-size: 18px;
+}
+
+#menu{
+	border-radius: 0;
+	margin-bottom: 25px;
+	background-color: #0b3b67;
+}
+
+#footer{
+	background-color: #0b3b67;
+	height: 40px;
+}
+
+#footertext{
+	color: #cfd0ca;
+	margin-top: 10px;
+}
+
+#content{
+	background-color: #FFFFFF;
+	width: 100%;
+}
+
+body{
+	background-color: #eaebfb;
+}
+
+.table-fixed tbody{
+	overflow-y: auto;
+  	max-height: 250px;
+  	width: 100%;
+}
+
+.table-fixed thead, .table-fixed tbody, .table-fixed tfoot{
+  display: block;
+}

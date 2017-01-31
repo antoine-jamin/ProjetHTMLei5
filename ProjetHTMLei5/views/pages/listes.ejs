@@ -1,0 +1,29 @@
+<% include ../partials/head %>
+
+<div class="row">
+	<div class="col-md-8 col-md-offset-1">
+		<h1> Liste des eleves </h1>
+	</div>
+</div>
+<% var pam_moyenne=0; var pince_moyenne=0; var num=0; %>
+<div class="row">
+	<div class="col-md-12">
+		<div class="col-md-10 col-md-offset-1">
+			<% if (!all_sheet.length) { %>
+				<b> Pas de patients enregistrés </b>
+				<br><br>
+
+			<%} else { %>
+				Numéro de dossier
+				<ol>
+				<% for (i = 0; i < all_sheet.length; i++){ %>
+<li><a href="patients/<%= all_sheet[i] %>"><%= all_sheet[i] %></a> </li>
+				<% } %>
+				</ol>
+			<% } %>
+		</div>
+	</div>
+</div>
+
+
+<% include ../partials/foot %>

@@ -1,0 +1,51 @@
+<% include ../partials/head %>
+
+<div class="row">
+	<div class="col-md-8 col-md-offset-1">
+		<h1> Liste des patients </h1>
+	</div>
+</div>
+<% var pam_moyenne=0; var pince_moyenne=0; var num=0; %>
+<div class="row">
+	<div class="col-md-12">
+		<div class="col-md-10 col-md-offset-1">
+			<% if (!valeur.patients.length) { %>
+				<b> Pas de donnée enregistrés </b>
+				<br><br>
+
+			<%} else { %>
+				<table class="table table-hover col-lg-4 col-lg-offset-1">
+
+				<% valeur.patients.forEach(function(patient) { %>
+					
+					<tr>
+						<td width=40> <%= patient.dA %> </td>
+						<td width=40> <%= patient.dB %> </td>
+						<td width=40> <%= patient.dC %> </td>
+						<td width=20> <%= patient.dD %> </td>
+						<td width=20> <%= patient.dPam %> </td>
+
+						<% if (parseInt(patient.dPincee) < "40") { %>
+							<td width=20 style="color:red; font-weight:bold">	
+						<% } else { %>
+							<td width=20> 
+						<% } %> 	
+						<%= patient.dPincee %></td>
+					</tr>
+				<% pam_moyenne =+ patient.dPam %>
+				<% pince_moyenne =+ patient.dPincee %>
+				<% num++; }); %>
+				</table>
+			<% } %>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<div class="col-md-6 col-md-offset-2">	
+			Valeur moyenne de PAM : <%= valeur.pam_moyenne %> mmHg</br>
+			Valeur moyenne de Pincee : <%= valeur.pince_moyenne %> mmHg
+		</div>
+	</div>
+</div>
+<% include ../partials/foot %>

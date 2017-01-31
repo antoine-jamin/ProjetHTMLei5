@@ -14,26 +14,27 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 
 
+
 /*  URL */
 //  Page d'accueil
 app.get('/', function (req, res) {
-    res.render("index.ejs"); 
+    res.render("pages/index.ejs"); 
 }); 
 
 app.get('/liste', function (req, res) {
-    //res.render("index.ejs");
+    //res.render("pages/index.ejs");
     var workbook = XLSX.readFile('patients.xlsx');
 
     // Récupèrer tous les sheets
     var all_sheet = workbook.SheetNames;
     console.log(all_sheet);
-    res.render("listes.ejs",{all_sheet}); 
+    res.render("pages/listes.ejs",{all_sheet}); 
 });
 
 app.get('/patients/:num', function (req, res) {
     var num = req.params.num;
     console.log(num);
-    //res.render("index.ejs");
+    //res.render("pages/index.ejs");
     var workbook = XLSX.readFile('patients.xlsx');
 
     // Récupèrer tous les sheets
@@ -97,12 +98,12 @@ app.get('/patients/:num', function (req, res) {
 
     console.log(valeur);
 
-    res.render("patients.ejs",{valeur});
+    res.render("pages/patients.ejs",{valeur});
     
 });
 
 app.get('/moyenne', function (req, res) {
- //res.render("index.ejs");
+ //res.render("pages/index.ejs");
     var workbook = XLSX.readFile('eleves.xlsx');
 
     // Récupèrer tous les sheets
@@ -153,7 +154,7 @@ app.get('/moyenne', function (req, res) {
     valeur.eleves = moyenne;
     console.log(valeur);
 
-    res.render("moyenne.ejs",{valeur});
+    res.render("pages/moyenne.ejs",{valeur});
 }); 
 
 // Démarrer le serveur
