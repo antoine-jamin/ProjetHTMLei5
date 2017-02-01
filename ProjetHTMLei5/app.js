@@ -19,7 +19,12 @@ app.use(express.static(__dirname + '/public'));
 //  Page d'accueil
 app.get('/', function (req, res) {
     res.render("pages/index.ejs"); 
-}); 
+});
+
+// Zone téléchargement des feuilles de style
+app.get('/download', function(req,res){
+    res.render("pages/download.ejs");
+});
 
 app.get('/liste', function (req, res) {
     //res.render("pages/index.ejs");
