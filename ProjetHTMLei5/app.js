@@ -4,6 +4,9 @@ var app = express();
 var ejs = require('ejs');
 var bodyParser = require("body-parser");
 var XLSX = require('xlsx');
+//File uploade
+var fileUpload = require('express-fileupload');
+var multer = require('multer');
 
 var NombreData = 4;
 var NombreDataMoy = 3;
@@ -13,7 +16,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 /*  Méthode pour utiliser le css  */
 app.use(express.static(__dirname + '/public'));
 
+/* Méthode pour upload le fichier */
+app.use(fileUpload());
 
+// set the view engine to ejs
+app.set('view engine', 'ejs');
 
 /*  URL */
 //  Page d'accueil
@@ -28,8 +35,13 @@ app.get('/download', function(req,res){
 
 app.get('/liste', function (req, res) {
     //res.render("pages/index.ejs");
-    var workbook = XLSX.readFile('patients.xlsx');
-
+    try{
+        var workbook = XLSX.readFile('public/uploads/patients.xlsx');
+    }catch(err){
+        var all_sheet = false;
+        res.render("pages/listes.ejs",{all_sheet}); 
+    }
+    
     // Récupèrer tous les sheets
     var all_sheet = workbook.SheetNames;
     console.log(all_sheet);
@@ -161,6 +173,34 @@ app.get('/moyenne', function (req, res) {
 
     res.render("pages/moyenne.ejs",{valeur});
 }); 
+
+
+//Upload, action POST
+var upload = multer( { dest: './public/uploads/'  } );
+app.post( '/upload', upload.single( 'file' ), function( req, res, next ) {
+  // Metadata about the uploaded file can now be found in req.file
+  //console.log(req.files.file.name);
+  var sampleFile;
+ 
+  if (!req.files) {
+    res.send('No files were uploaded.');
+    return;
+  }
+ 
+  // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file 
+  sampleFile = req.files.file;
+  // Use the mv() method to place the file somewhere on your server 
+  sampleFile.mv('./public/uploads/'+ 'patients.xlsx', function(err) {
+    if (err) {
+      res.status(500).send(err);
+    }
+    else {
+        console.log('File uploaded');
+    }
+  });  
+   res.render('pages/uploaded');
+});
+
 
 // Démarrer le serveur
 app.listen(3000);

@@ -1,5 +1,21 @@
 <% include ../partials/head %>
 
+	<!-- PDF generator -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
+	<!-- CSS -->
+	<link rel="stylesheet" href="/css/style.css">
+
+
+<!-- Generate PDF -->
+<script>
+    //Create a PDF
+	var doc = new jsPDF();
+	var y = 35;
+	doc.setFontSize(22);
+	doc.setTextColor(0);
+	doc.text(20 , 20, "Dossier patient : ");
+</script>
+
 <div class="row">
 	<div class="col-md-8 col-md-offset-1">
 		<h1> Dossier patient : <%= {valeur} %> </h1>
@@ -31,11 +47,40 @@
 							<td width=20> 
 						<% } %> 	
 						<%= patient.dPincee %></td>
+
+						<script>
+							doc.setFontSize(12);
+							doc.setTextColor(0);
+							doc.text(20 , y, "<%= patient.dA %>");
+							doc.text(55 , y, "<%= patient.dB %>");
+							doc.text(85 , y, "<%= patient.dC %>");
+							doc.text(115 , y, "<%= patient.dD %>");
+							doc.text(145 , y, "<%= patient.dPam %>");
+							var str = "<%= patient.dPincee %>";
+							if(str < 40){
+								doc.setTextColor(255,0,0);
+								doc.text(170 , y, str);
+							}else{
+								doc.text(170 , y, str);
+							}
+						</script>
 					</tr>
+
+					<script>
+					   doc.setLineWidth(0.5);
+					   doc.line(20, y + 3, 190, y + 3);
+					   y = y + 10;
+					</script>	
+
 				<% pam_moyenne =+ patient.dPam %>
 				<% pince_moyenne =+ patient.dPincee %>
 				<% num++; }); %>
 				</table>
+				<script>
+					doc.setTextColor(0);
+					doc.text(20 , y + 10, "Valeur moyenne de PAM : " + <%= valeur.pam_moyenne %> + " mmHg");
+					doc.text(20 , y + 15 , "Valeur moyenne de Pincee : " + <%= valeur.pince_moyenne %> + " mmHg");
+				</script>			
 			<% } %>
 		</div>
 	</div>
@@ -48,4 +93,20 @@
 		</div>
 	</div>
 </div>
+
+<!-- Download PDF -->
+<div class="row">
+	<div class="col-md-8 col-md-offset-1">
+		<br>
+		<form>
+		         <button class="button" onclick="doc.save('Result.pdf')">Download PDF</button>
+		</form>
+		<br>
+		<!-- Return -->
+		<form>
+		        <a href="/liste"><input type="button" class="button" value="Return"></a>
+		</form>
+	</div>
+</div>
+
 <% include ../partials/foot %>
