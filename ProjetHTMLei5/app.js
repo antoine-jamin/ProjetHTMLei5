@@ -52,7 +52,7 @@ app.get('/patients/:num', function (req, res) {
     var num = req.params.num;
     console.log(num);
     //res.render("pages/index.ejs");
-    var workbook = XLSX.readFile('patients.xlsx');
+    var workbook = XLSX.readFile('public/uploads/patients.xlsx');
 
     // Récupèrer tous les sheets
     var all_sheet = workbook.SheetNames;
@@ -121,7 +121,7 @@ app.get('/patients/:num', function (req, res) {
 
 app.get('/moyenne', function (req, res) {
  //res.render("pages/index.ejs");
-    var workbook = XLSX.readFile('eleves.xlsx');
+    var workbook = XLSX.readFile('public/uploads/eleves.xlsx');
 
     // Récupèrer tous les sheets
     var all_sheet = workbook.SheetNames;
