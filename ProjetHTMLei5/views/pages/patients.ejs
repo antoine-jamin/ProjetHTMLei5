@@ -5,6 +5,8 @@
 	<!-- CSS -->
 	<link rel="stylesheet" href="/css/style.css">
 
+	<script src="/javascripts/jquery.js"></script>
+	<script src="/javascripts/Chart.js"></script>
 
 <!-- Generate PDF -->
 <script>
@@ -13,26 +15,26 @@
 	var y = 35;
 	doc.setFontSize(22);
 	doc.setTextColor(0);
-	doc.text(20 , 20, "Dossier patient : ");
+	doc.text(20 , 20, "Dossier patient : <% valeur.num %>");
 </script>
 
 <div class="row">
 	<div class="col-md-8 col-md-offset-1">
-		<h1> Dossier patient : <%= {valeur} %> </h1>
+		<h1> Dossier patient : <%= valeur.num %> </h1>
 	</div>
 </div>
 <% var pam_moyenne=0; var pince_moyenne=0; var num=0; %>
 <div class="row">
 	<div class="col-md-12">
 		<div class="col-md-10 col-md-offset-1">
-			<% if (!valeur.patients.length) { %>
+			<% if (!valeur.patient.length) { %>
 				<b> Pas de donnée enregistrés </b>
 				<br><br>
 
 			<%} else { %>
 				<table class="table table-hover col-lg-4 col-lg-offset-1">
 
-				<% valeur.patients.forEach(function(patient) { %>
+				<% valeur.patient.forEach(function(patient) { %>
 					
 					<tr>
 						<td width=40> <%= patient.dA %> </td>
@@ -93,6 +95,98 @@
 		</div>
 	</div>
 </div>
+<div class="row">
+	<div class="col-md-12">
+		<div class="col-md-8 col-md-offset-2" style="text-align:center">
+			<button onclick="myFunction(1)">Pouls</button>
+			<button onclick="myFunction(2)">Systole/Diastole</button>
+			<button onclick="myFunction(3)">Pam</button>
+			<button onclick="myFunction(4)">Pincee</button>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<div id="legend-canvas"></div>	
+		<canvas id="mycanvas" width="400" height="400"></canvas>
+	</div>
+</div>
+
+<script>
+	function myFunction(test) {
+		// Déclaration des tableaux labels et données
+		var array_label = [];
+		var array_data1 = [];
+		var array_data2 = [];
+		var y=0;
+		var name;
+
+		// ajoute les données aux tableaux pour le graph
+		<% valeur.patient.forEach(function(patient) { %>
+			if(y==0){
+				// Permet d'afficher une légende au graphique
+				if(test==1) document.getElementById("legend-canvas").innerHTML = "<font size=\"2\" color=\"red\"><%=patient.dB%></font>";
+				if(test==2) document.getElementById("legend-canvas").innerHTML = "<font size=\"2\" color=\"red\"><%= patient.dC%></font>"+ "<font size=\"2\" color=\"black\">/</font>" + "<font size=\"2\" color=\"blue\"><%= patient.dD%></font>";
+				if(test==3) document.getElementById("legend-canvas").innerHTML = "<font size=\"2\" color=\"red\"><%= patient.dPam%></font>";
+				if(test==4) document.getElementById("legend-canvas").innerHTML = "<font size=\"2\" color=\"red\"><%=patient.dPincee%></font>";
+				y++;
+			}
+			else{
+				// Permet de mettre les données dans le tableau
+				if(test==1)array_data1.push(<%=patient.dB%>);
+				if(test==2){
+					array_data1.push(<%= patient.dC%>);
+					array_data2.push(<%= patient.dD%>);
+				}
+				if(test==3)array_data1.push(<%= patient.dPam%>);
+				if(test==4)array_data1.push(<%= patient.dPincee%>);
+				array_label.push("<%= patient.dA%>");
+			}
+			
+		<% }); %>
+
+		// Déclaration des données composant le graphique
+		var lineChartData ={
+			labels:array_label,
+			datasets :[{
+				label : name,
+				fillColor: "rgba(0,220,220,0)",
+		        strokeColor: "rgba(232,21,21,1)",
+		        pointColor: "rgba(232,21,21,1)",
+		        pointStrokeColor: "#fff",
+		        pointHighlightFill: "#fff",
+		        pointHighlightStroke: "rgba(220,220,220,1)",
+				data :array_data1
+			}]
+		}
+
+		// Si test est égale à 2 alors il faut ajouter une donnée à datasets
+		if(test==2){
+			lineChartData.datasets.push({
+				label : name,
+				fillColor: "rgba(0,220,220,0)",
+		        strokeColor: "rgba(21,21,232,1)",
+		        pointColor: "rgba(21,21,232,1)",
+		        pointStrokeColor: "#fff",
+		        pointHighlightFill: "#fff",
+		        pointHighlightStroke: "rgba(220,220,220,1)",
+				data :array_data2
+			});
+		}
+
+		// Mets en place le contexte pour écrire le graphique dans l'id "mycanvas"
+		var ctx = document.getElementById("mycanvas").getContext("2d");
+		var lineOptions  = {
+			pointDotRadius : 3,
+			bezierCurse:false,
+			scaleShowVerticalLines : false,
+			scaleGridLineColor: "black"
+		}
+		// Déclaration du graphique
+		var LineChart = new Chart(ctx).Line(lineChartData,lineOptions);
+	}
+</script>
 
 <!-- Download PDF -->
 <div class="row">

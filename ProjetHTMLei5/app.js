@@ -67,7 +67,7 @@ app.get('/patients/:num', function (req, res) {
     var i =0;
     var y =0;
     var patient1 = [];
-    var valeur = {"pam_moyenne":0,"pince_moyenne":0,"patients":null};
+    var valeur = {"num":num,"pam_moyenne":0,"pince_moyenne":0,"patient":null};
 
     // Récupèrer le patient 1
     for (data in patient1_data) {
@@ -111,7 +111,7 @@ app.get('/patients/:num', function (req, res) {
 
     valeur.pam_moyenne = (parseFloat(valeur.pam_moyenne / patient1.length)).toFixed(1);
     valeur.pince_moyenne = (parseFloat(valeur.pince_moyenne / patient1.length)).toFixed(1);
-    valeur.patients = patient1;
+    valeur.patient = patient1;
 
     console.log(valeur);
 
