@@ -1,29 +1,40 @@
 <% include ../partials/head %>
 
+<script src="ejs.js"></script>
 <div class="row">
 	<div class="col-md-8 col-md-offset-1">
-		<h1> Liste des eleves </h1>
+		<h1> Liste des élèves </h1>
 	</div>
 </div>
-<% var pam_moyenne=0; var pince_moyenne=0; var num=0; %>
+<% var y=0; %>
 <div class="row">
 	<div class="col-md-12">
 		<div class="col-md-10 col-md-offset-1">
-			<% if (!valeur.eleves.length) { %>
-				<b> Pas de donnée enregistrés </b>
+			<% if (!valeur.tabEleves.length) { %>
+				<b> Pas de donnée enregistrée </b>
 				<br><br>
 
 			<%} else { %>
 				<table class="table table-hover col-lg-4 col-lg-offset-1">
 
-				<% valeur.eleves.forEach(function(eleve) { %>
-					
+				<% valeur.tabEleves.forEach(function(eleve) { %>
+					<% if(y==0){%>
+					<tr style="font-weight:bold">
+					<% }else{%>
 					<tr>
-						<td width=40> <%= eleve.dA %> </td>
-						<td width=40> <%= eleve.dB %> </td>
-						<td width=40> <%= eleve.dC %> </td>
+					<% } %>
+					
+						<td width=40> <%= eleve.nom %> </td>
+						<td width=40> <%= eleve.prenom %> </td>
+						<script language=javascript>
+							console.log(<%= eleve.notes %>);
+							var chaine = <%= eleve.notes %>;
+							for (var i=0; i<chaine.length; i++) {
+								document.write("<td>" + chaine[i].toString() + "</td>");
+							}
+						</script>
 					</tr>
-				<% }) %>
+				<% y++;}) %>
 				</table>
 			<% } %>
 		</div>

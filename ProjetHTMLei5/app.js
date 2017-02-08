@@ -136,41 +136,52 @@ app.get('/moyenne', function (req, res) {
     var data_jour = {"dA":0,"dB":0,"dC":0};
     var i =0;
     var y =0;
-    var moyenne = [];
+    var moyenne;
+    var notes=[];
+    var eleve = {"nom":"","prenom":"","notes":"","moyenne":0};
 
-    var valeur = {"ecart_type":0,"moyenne_classe":0,"eleves":null};
-    // Récupèrer le patient 1
+    var valeur = {
+        "ecart_type":0,
+        "moyenne_classe":0,
+        "tabEleves":[]
+    };
+    var nombreCase=0;
+    // Fait un premier passage dans le EXCEL pour savoir le nombre de note
     for (data in moyenne_data) {
-        if(y%NombreDataMoy==0)var data_jour = {"dA":0,"dB":0,"dC":0};
-        //console.log(data_jour);
+        if(data[0] === '!')continue;
+        if(data[1] === '1'){
+            // Permet de compter le nombre de colonnes
+            nombreCase++;    
+        }
+        // Si la deuxième variable est '2' alors fin
+        if(data[1] === '2') break;
+    }
+
+    //console.log(nombreCase);
+    for (data in moyenne_data) {
+        if(y%nombreCase==0){
+            eleve = {"nom":"","prenom":"","notes":"","moyenne":0};
+            notes = [];
+        }
 
         if(data[0] === '!')continue;
-        if(data[1] === '1' && i<NombreData){
-            //console.log(data + "=" + JSON.stringify(patient1_data[data].v));
-            //console.log(i);
-            if(data[0] === 'A'){data_jour.dA=moyenne_data[data].v;};
-            if(data[0] === 'B'){data_jour.dB=moyenne_data[data].v;};
-            if(data[0] === 'C'){
-                data_jour.dC=moyenne_data[data].v;
-                moyenne.push(data_jour);
-                //console.log(patient1);
-            };
-            i++;    
-        }
-        else{
-            if(data[0] === 'A'){data_jour.dA=moyenne_data[data].w;};
-            if(data[0] === 'B'){data_jour.dB=moyenne_data[data].v;};
-            if(data[0] === 'C'){
-                data_jour.dC=moyenne_data[data].v;
-                moyenne.push(data_jour);
-                //console.log(patient1);
-            };        
-        }
+        // Nous rentrons dans la deuxième colonne
+        if(data[0] === 'A') eleve.nom=moyenne_data[data].w;
+        else if(data[0] === 'B') eleve.prenom=moyenne_data[data].v;
+        else {
+            notes.push(moyenne_data[data].v);
+            //console.log(notes);
+        };    
         y++;
+        if(y%nombreCase==0){
+            //console.log("ArrayToJson : " + JSON.parse(JSON.stringify(notes)));
+            eleve.notes = JSON.stringify(notes);
+            valeur.tabEleves.push(eleve);
+        }
+        //console.log(donnee);
     }
-    valeur.eleves = moyenne;
+    //valeur.moyenne_classe = moyenne / (nombreCase-2);
     console.log(valeur);
-
     res.render("pages/moyenne.ejs",{valeur});
 }); 
 
