@@ -15,7 +15,7 @@
 	var y = 35;
 	doc.setFontSize(22);
 	doc.setTextColor(0);
-	doc.text(20 , 20, "Dossier patient : <% valeur.num %>");
+	doc.text(20 , 20, " Dossier patient : <%= valeur.num %>");
 </script>
 
 <div class="row">
@@ -101,10 +101,10 @@
 <div class="row">
 	<div class="col-md-12">
 		<div class="col-md-8 col-md-offset-2" style="text-align:center">
-			<button onclick="myFunction(1)">Pouls</button>
-			<button onclick="myFunction(2)">Systole/Diastole</button>
-			<button onclick="myFunction(3)">Pam</button>
-			<button onclick="myFunction(4)">Pincee</button>
+			<button class="button" onclick="myFunction(1)">Pouls</button>
+			<button class="button" onclick="myFunction(2)">Systole/Diastole</button>
+			<button class="button" onclick="myFunction(3)">Pam</button>
+			<button class="button" onclick="myFunction(4)">Pincee</button>
 		</div>
 	</div>
 </div>
@@ -117,6 +117,12 @@
 </div>
 
 <script>
+//canvas into url data
+var url_string_64;
+
+//check if chart_buttons clicked
+var btn_clicked = false;
+
 	function myFunction(test) {
 		// Déclaration des tableaux labels et données
 		var array_label = [];
@@ -125,11 +131,13 @@
 		var y=0;
 		var name;
 
+		btn_clicked = true;
+
 		// ajoute les données aux tableaux pour le graph
 		<% valeur.patient.forEach(function(patient) { %>
 			if(y==0){
 				// Permet d'afficher une légende au graphique
-				if(test==1) document.getElementById("legend-canvas").innerHTML = "<font size=\"2\" color=\"red\"><%=patient.dB%></font>";
+				if(test==1) document.getElementById("legend-canvas").innerHTML = "<font size=\"2\" color=\"red\"><%=patient.dB%></font>"; 
 				if(test==2) document.getElementById("legend-canvas").innerHTML = "<font size=\"2\" color=\"red\"><%= patient.dC%></font>"+ "<font size=\"2\" color=\"black\">/</font>" + "<font size=\"2\" color=\"blue\"><%= patient.dD%></font>";
 				if(test==3) document.getElementById("legend-canvas").innerHTML = "<font size=\"2\" color=\"red\"><%= patient.dPam%></font>";
 				if(test==4) document.getElementById("legend-canvas").innerHTML = "<font size=\"2\" color=\"red\"><%=patient.dPincee%></font>";
@@ -184,11 +192,31 @@
 			pointDotRadius : 3,
 			bezierCurse:false,
 			scaleShowVerticalLines : false,
-			scaleGridLineColor: "black"
+			scaleGridLineColor: "black",
+
+			onAnimationComplete: function () {
+		       console.log(LineChart.toBase64Image());
+		       url_string_64 = LineChart.toBase64Image();
+		       
+		    }
 		}
+
 		// Déclaration du graphique
 		var LineChart = new Chart(ctx).Line(lineChartData,lineOptions);
+		
+		
 	}
+</script>
+
+<script>
+function savePDF() {
+	if(btn_clicked){
+		doc.addPage('a4');
+		doc.text(20 , 15 , document.getElementById('legend-canvas').textContent);
+		doc.addImage(url_string_64, 'JPEG', 20, 20, 100, 100);
+	}
+	doc.save('Result.pdf')
+}
 </script>
 
 <!-- Download PDF -->
@@ -196,7 +224,7 @@
 	<div class="col-md-8 col-md-offset-1">
 		<br>
 		<form>
-		         <button class="button" onclick="doc.save('Result.pdf')">Download PDF</button>
+		         <button class="button" onclick= "savePDF()" >Download PDF</button>
 		</form>
 		<br>
 		<!-- Return -->
