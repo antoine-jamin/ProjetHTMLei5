@@ -28,6 +28,11 @@ app.get('/', function (req, res) {
     res.render("pages/index.ejs"); 
 });
 
+//Page A propos
+app.get('/apropos', function (req, res) {
+    res.render("pages/apropos.ejs"); 
+});
+
 // Zone téléchargement des feuilles de style
 app.get('/download', function(req,res){
     res.render("pages/download.ejs");
